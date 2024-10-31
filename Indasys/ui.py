@@ -70,6 +70,9 @@ class titleScreen():
     
 
 
+def pauseupdate():
+    pass
+
 
 class ui():
     def __init__(self, screen):

@@ -62,6 +62,7 @@ class main():
         self.biomeid = 2
         self.md = False
         self.mdel = False
+        self.paused = False
         self.selection = 1
         self.clickx = None
         self.clicky = None
@@ -121,34 +122,43 @@ class main():
                     pygame.quit()
                     sys.exit()
                 mousex, mousey = pygame.mouse.get_pos()
-                # screen.fill((0,0,0))
                 screen.blit(pointer,(mousex, mousey))
                 pygame.display.flip()
         self.createTileMap()
         self.createTopLayer()
         while self.running:
-            self.relx, self.rely = pygame.mouse.get_rel()
-            self.clock.tick(60)
-            self.fpsdisplay = self.font.render(str(int(self.clock.get_fps())), False, (255,255,255))
-            self.tilegroupvariables = self.tilegroup.sprites()
-            self.weatherbrightness = self.stormHandler.getBrightness()
-            self.Player.update()
-            self.core.update(self.Player.x, self.Player.y)
-            self.draw()
-            
-            self.stormHandler.loop()
-            self.tilegroup.update(self.Player.x, self.Player.y, self.md, self)
-            self.topgroup.update(self.Player.x, self.Player.y, self.mdel, self)
-            self.conveyorgroup.update(self.Player.x, self.Player.y, self.frame, self.mdel, self)
-            for a in self.itemgroup.sprites():
-                a.checkahead(self.toplayer)
-            self.itemgroup.update(self.Player.x, self.Player.y, self.toplayer, self.directions)
+            if not self.paused:
+                self.relx, self.rely = pygame.mouse.get_rel()
+                self.clock.tick(60)
+                self.fpsdisplay = self.font.render(str(int(self.clock.get_fps())), False, (255,255,255))
+                self.tilegroupvariables = self.tilegroup.sprites()
+                self.weatherbrightness = self.stormHandler.getBrightness()
+                self.Player.update()
+                self.core.update(self.Player.x, self.Player.y)
+                self.draw()
+                
+                self.stormHandler.loop()
+                self.tilegroup.update(self.Player.x, self.Player.y, self.md, self)
+                self.topgroup.update(self.Player.x, self.Player.y, self.mdel, self)
+                self.conveyorgroup.update(self.Player.x, self.Player.y, self.frame, self.mdel, self)
+                for a in self.itemgroup.sprites():
+                    a.checkahead(self.toplayer)
+                self.itemgroup.update(self.Player.x, self.Player.y, self.toplayer, self.directions)
 
-            if self.frame >= 4:
-                self.frame = 1
+                if self.frame >= 4:
+                    self.frame = 1
 
-            
-            self.Speaker.update(self.biomeid)
+                
+                self.Speaker.update(self.biomeid)
+
+                
+                self.passedframes += 1
+                if self.passedframes >= 10:
+                    self.frame += 1
+                    self.passedframes = 0
+
+            else:
+                pass
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
@@ -203,12 +213,12 @@ class main():
                             self.tileclickdir = 0
                         else:
                             self.tileclickdir += 1
-
-            
-            self.passedframes += 1
-            if self.passedframes >= 10:
-                self.frame += 1
-                self.passedframes = 0
+                    
+                    if event.key == pygame.K_ESCAPE:
+                        if self.paused == True:
+                            self.paused = False
+                        else:
+                            self.paused = True
 
                     
     def draw(self):
