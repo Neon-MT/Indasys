@@ -15,9 +15,9 @@ class particle(pygame.sprite.Sprite):
     def move(self):
         self.x += self.xvel
         self.y += self.yvel
-        if self.x >= SCREEN_WIDTH:
+        if self.x >= SCREEN_WIDTH+self.radius:
             self.kill()
-        if self.y >= SCREEN_HEIGHT:
+        if self.y >= SCREEN_HEIGHT+self.radius:
             self.kill()
 
     def drawself(self, screen):

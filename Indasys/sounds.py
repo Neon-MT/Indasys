@@ -13,6 +13,7 @@ class Speaker():
     def __init__(self, b):
         self.musicChannel = pygame.mixer.Channel(1)
         self.sfxChannel = pygame.mixer.Channel(2)
+        self.ambientChannel = pygame.mixer.Channel(3)
         if b:
             self.menumusic = pygame.mixer.Sound(os.path.join(os.path.dirname(__file__), "sounds" , "music" , "BeepBox-Song.ogg"))
             self.musicChannel.play(self.menumusic)
@@ -62,4 +63,4 @@ class Speaker():
         self.sfxplay.wait_done()
 
     def rainsound(self):
-        self.sfxChannel.play(self.rainsfx)
+        self.ambientChannel.play(self.rainsfx)

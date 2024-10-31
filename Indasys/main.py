@@ -15,7 +15,7 @@ from particle import *
 pygame.font.init()
 pygame.init()
 
-flags = DOUBLEBUF | pygame.RESIZABLE
+flags = FULLSCREEN | DOUBLEBUF | pygame.RESIZABLE
 screen = pygame.display.set_mode([SCREEN_WIDTH, SCREEN_HEIGHT] , flags, 16)
 
 
@@ -25,7 +25,9 @@ pygame.event.set_allowed([QUIT, KEYDOWN, KEYUP, MOUSEBUTTONDOWN, MOUSEBUTTONUP])
 
 pygame.display.set_caption("Game")
 afont = pygame.font.SysFont('Ariel', 50)
-screen.blit(afont.render("Loading...", False, (255,255,255)), (SCREEN_WIDTH/2, SCREEN_HEIGHT/2))
+loadtext = afont.render("Loading...", False, (255,255,255))
+arect = loadtext.get_rect(center = (SCREEN_WIDTH/2, SCREEN_HEIGHT/2))
+screen.blit(loadtext, arect)
 pygame.display.flip()
 
 
@@ -100,6 +102,7 @@ class main():
                         self.drillLevels = self.gameData["drilllevels"]
                         self.drillprogression = self.gameData["drillProgression"]
                         self.conveyorTurns = self.gameData["conveyorTurns"]
+                        self.biomeid = self.gameData["planet"]
                         self.pastTitle = True
                 #creates new game
                 elif updates == 2:
@@ -110,7 +113,13 @@ class main():
                     self.drillLevels = self.gameData["drilllevels"]
                     self.drillprogression = self.gameData["drillProgression"]
                     self.conveyorTurns = self.gameData["conveyorTurns"]
+                    self.biomeid = self.gameData["planet"]
                     self.pastTitle = True
+
+                elif updates == 3:
+                    self.running == False
+                    pygame.quit()
+                    sys.exit()
                 mousex, mousey = pygame.mouse.get_pos()
                 # screen.fill((0,0,0))
                 screen.blit(pointer,(mousex, mousey))

@@ -7,10 +7,10 @@ pygame.init()
 TILESIZE = 100
 
 SCREEN_WIDTH=pygame.display.Info().current_w
-SCREEN_HEIGHT=pygame.display.Info().current_h - 50
+SCREEN_HEIGHT=pygame.display.Info().current_h #subtract 50 if not in fullscreen
 
 WINDOWRECT = pygame.Rect(0,0,SCREEN_WIDTH,SCREEN_HEIGHT)
-
+PLANET = 2
 DIFFICULTY = 1000
 
 MOVEMENTSPEED = 6
@@ -170,7 +170,7 @@ class loader():
                     except:
                         pass
 
-        returnr = {"tilemap":DEFAULT, "toplayer":TOPLAYER, "mapsize":MAPSIZE, "directions":DIRECTIONS, "drilllevels":LEVELS, "drillProgression":0, "conveyorTurns":CONVEYORTURNS}
+        returnr = {"tilemap":DEFAULT, "toplayer":TOPLAYER, "mapsize":MAPSIZE, "directions":DIRECTIONS, "drilllevels":LEVELS, "drillProgression":0, "conveyorTurns":CONVEYORTURNS, "planet":PLANET}
         return returnr
 
 
