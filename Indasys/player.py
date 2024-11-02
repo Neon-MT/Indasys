@@ -15,18 +15,16 @@ class Player(pygame.sprite.Sprite):
         self.y_vel = 0
         self.image = pygame.image.load(os.path.dirname(__file__)+ "/assets/playerMain.png")
         self.image = pygame.transform.scale(self.image, (100,100))
-        self.drawx = SCREEN_MIDDLE_X - self.image.get_width()/2
-        self.drawy =  SCREEN_MIDDLE_Y - self.image.get_height()/2
+        self.drawx = SCREEN_MIDDLE_X
+        self.drawy =  SCREEN_MIDDLE_Y 
 
-        self.rect = self.image.get_rect()
+        self.rect = self.image.get_rect(center = (self.drawx, self.drawy))
+        self.hitbox = self.image.get_rect()
         self.game = game
         self.rotation = 0
 
 
     def update(self):
-        # if self.rotation != dir:
-        #     self.image = pygame.transform.rotate(self.image, dir-self.rotation)
-        #     self.rotation = dir
 
         key = pygame.key.get_pressed()
 
@@ -57,14 +55,23 @@ class Player(pygame.sprite.Sprite):
 
 
         mouse_x, mouse_y = pygame.mouse.get_pos()
+
+
+
         try:
             angle = 360-math.atan2(mouse_x - self.drawx, mouse_y - self.drawy)*180/math.pi * -1 - 180
+            #angle += self.image.get_width()
         except:
             angle = 0
-        self.image2 = pygame.transform.rotate(self.image, int(angle))
-        #self.rect = self.image.get_rect(center=(self.drawx + 50, self.drawy + 1002002))
+
+        
+
+
+
+        self.image2 = pygame.transform.rotozoom(self.image, int(angle), 1)
+        self.rect = self.image2.get_rect(center=self.rect.center)
 
     def draw(self, screen):
-        screen.blit(self.image2, (self.drawx, self.drawy))
+        screen.blit(self.image2, self.rect)
 
     

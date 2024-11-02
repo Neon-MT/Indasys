@@ -53,14 +53,23 @@ class Speaker():
 
 
     def getRand(self):
-        return random.randint(10,20)
+        return random.randint(200,1000)
 
     def delSound(self):
         self.sfxChannel.play(self.deletesound)
 
-    def placeSound(self):
-        self.sfxplay = self.place.play()
-        self.sfxplay.wait_done()
-
     def rainsound(self):
         self.ambientChannel.play(self.rainsfx)
+
+    def pauseAll(self):
+        self.musicChannel.pause()
+        self.sfxChannel.pause()
+        self.ambientChannel.pause()
+
+    def unpauseAll(self):
+        self.musicChannel.unpause()
+        self.sfxChannel.unpause()
+        self.ambientChannel.unpause()
+
+    def stopMusic(self):
+        self.musicChannel.stop()

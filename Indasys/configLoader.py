@@ -10,7 +10,7 @@ SCREEN_WIDTH=pygame.display.Info().current_w
 SCREEN_HEIGHT=pygame.display.Info().current_h #subtract 50 if not in fullscreen
 
 WINDOWRECT = pygame.Rect(0,0,SCREEN_WIDTH,SCREEN_HEIGHT)
-PLANET = 2
+PLANET = 4
 DIFFICULTY = 1000
 
 MOVEMENTSPEED = 6

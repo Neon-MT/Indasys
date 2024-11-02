@@ -4,7 +4,7 @@ import os
 from player import *
 from tile import *
 from configLoader import *
-from Map import *
+from map import *
 from sounds import *
 import pygame.font
 from ui import *
@@ -55,17 +55,20 @@ class main():
         self.title = titleScreen()
         self.corex = random.randint(0,MAPSIZE-1)
         self.corey = random.randint(0,MAPSIZE-1)
+        self.polution = 0
+
         self.frame = 0
         self.passedframes = 0
         self.drilltick = 0
         self.err = False
-        self.biomeid = 2
+        self.biomeid = PLANET
         self.md = False
         self.mdel = False
         self.paused = False
         self.selection = 1
         self.clickx = None
         self.clicky = None
+        self.pausemusicframe = 0
         self.weatherbrightness = 0
         self.relx = 0
         self.tileclickdir = 0
@@ -74,8 +77,8 @@ class main():
         self.drillselection = 0
         self.uier = ui(self.visableScreen)
         self.stormHandler = stormHandler()
-        self.clouds = self.stormHandler.thunderStorm(10, 3000)
-        self.Speaker.rainsound()
+        self.menu = pausemenu()
+        self.initiateStorm(30,3000)
         self.mainloop()
 
         
@@ -126,8 +129,12 @@ class main():
                 pygame.display.flip()
         self.createTileMap()
         self.createTopLayer()
+        self.Speaker.stopMusic()
         while self.running:
             if not self.paused:
+                if self.pausemusicframe >= 1:
+                    self.Speaker.unpauseAll()
+                    self.pausemusicframe = 0
                 self.relx, self.rely = pygame.mouse.get_rel()
                 self.clock.tick(60)
                 self.fpsdisplay = self.font.render(str(int(self.clock.get_fps())), False, (255,255,255))
@@ -135,9 +142,8 @@ class main():
                 self.weatherbrightness = self.stormHandler.getBrightness()
                 self.Player.update()
                 self.core.update(self.Player.x, self.Player.y)
-                self.draw()
                 
-                self.stormHandler.loop()
+                self.stormHandler.loop(self.biomeid)
                 self.tilegroup.update(self.Player.x, self.Player.y, self.md, self)
                 self.topgroup.update(self.Player.x, self.Player.y, self.mdel, self)
                 self.conveyorgroup.update(self.Player.x, self.Player.y, self.frame, self.mdel, self)
@@ -151,6 +157,7 @@ class main():
                 
                 self.Speaker.update(self.biomeid)
 
+
                 
                 self.passedframes += 1
                 if self.passedframes >= 10:
@@ -158,7 +165,11 @@ class main():
                     self.passedframes = 0
 
             else:
-                pass
+                self.pausemusicframe = 1
+                self.Speaker.pauseAll()
+                self.draw()
+                self.menu.update(self.visableScreen)
+            self.draw()
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
@@ -168,6 +179,7 @@ class main():
                     askSave(self.gameData)
                     self.running = False
                     sys.exit()
+
                     
 
                 if event.type == pygame.MOUSEBUTTONDOWN:
@@ -179,9 +191,6 @@ class main():
                 if event.type == pygame.MOUSEBUTTONUP:
                         self.md = False
                         self.mdel = False
-
-                
-
 
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_1:
@@ -222,25 +231,35 @@ class main():
 
                     
     def draw(self):
-            # screen.fill((r,g,b))
-            self.visableScreen.fill((0,0,0))
-            self.weatherScreen.fill((0,0,0))
+            if not self.paused:
+                # screen.fill((r,g,b))
+                self.visableScreen.fill((0,0,0))
+                if self.weatherbrightness == -1:
+                    self.weatherScreen.fill((random.randint(200,255),random.randint(200,255),random.randint(200,255)))
+                else:
+                    self.weatherScreen.fill((0,0,0))
 
-            self.stormHandler.draw(self.weatherScreen)
-            self.weatherScreen.set_alpha(self.weatherbrightness)
-            self.tilegroup.draw(self.visableScreen)
-            self.topgroup.draw(self.visableScreen)
-            self.conveyorgroup.draw(self.visableScreen)
-            self.itemgroup.draw(self.visableScreen)
-            self.core.draw(self.visableScreen)
+                self.stormHandler.draw(self.weatherScreen)
+                self.weatherScreen.set_alpha(self.weatherbrightness)
+                self.tilegroup.draw(self.visableScreen)
+                self.topgroup.draw(self.visableScreen)
+                self.conveyorgroup.draw(self.visableScreen)
+                self.itemgroup.draw(self.visableScreen)
+                self.core.draw(self.visableScreen)
 
-            mx, my = pygame.mouse.get_pos()
 
-            self.Player.draw(self.visableScreen)
-            self.visableScreen.blit(self.weatherScreen, (0,0), (0,0,SCREEN_WIDTH,SCREEN_HEIGHT))
-            screen.blit(self.visableScreen, (0,0), (0,0,SCREEN_WIDTH,SCREEN_HEIGHT))
-            screen.blit(pointer,(mx, my))
-            screen.blit(self.fpsdisplay, (0,0))
+                self.Player.draw(self.visableScreen)
+                self.visableScreen.blit(self.weatherScreen, (0,0), (0,0,SCREEN_WIDTH,SCREEN_HEIGHT))
+                screen.blit(self.visableScreen, (0,0), (0,0,SCREEN_WIDTH,SCREEN_HEIGHT))
+                screen.blit(self.fpsdisplay, (0,0))
+                mx, my = pygame.mouse.get_pos()
+                screen.blit(pointer,(mx, my))
+
+            else:
+                screen.blit(self.visableScreen, (0,0), (0,0,SCREEN_WIDTH,SCREEN_HEIGHT))
+                mx, my = pygame.mouse.get_pos()
+                screen.blit(pointer,(mx, my))
+
             pygame.display.flip()
 
 
@@ -357,4 +376,12 @@ class main():
             a = thoriumItem(x, y, 0)
         self.itemgroup.add(a)
 
+    def initiateStorm(self, intensity, duration):
+        self.clouds = self.stormHandler.thunderStorm(intensity, duration)
+        if self.biomeid != 4:
+            self.Speaker.rainsound()
+        
+
+
 gameobj = main()
+
