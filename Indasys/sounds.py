@@ -14,6 +14,7 @@ class Speaker():
         self.musicChannel = pygame.mixer.Channel(1)
         self.sfxChannel = pygame.mixer.Channel(2)
         self.ambientChannel = pygame.mixer.Channel(3)
+        self.windChannel = pygame.mixer.Channel(4)
         if b:
             self.menumusic = pygame.mixer.Sound(os.path.join(os.path.dirname(__file__), "sounds" , "music" , "BeepBox-Song.ogg"))
             self.musicChannel.play(self.menumusic)
@@ -25,6 +26,9 @@ class Speaker():
             self.bbxs = pygame.mixer.Sound(os.path.join(os.path.dirname(__file__), "sounds" , "music" , "BeepBox-Song.ogg"))
             self.dune = pygame.mixer.Sound(os.path.join(os.path.dirname(__file__), "sounds" , "music" , "Dune.ogg"))
             self.rainsfx = pygame.mixer.Sound(os.path.join(os.path.dirname(__file__), "sounds" , "soundfx" , "rain.ogg"))
+            self.thundersfx = pygame.mixer.Sound(os.path.join(os.path.dirname(__file__), "sounds" , "soundfx" , "thunder.mp3"))
+            self.windsfx = pygame.mixer.Sound(os.path.join(os.path.dirname(__file__), "sounds" , "soundfx" , "wind.mp3"))
+            self.snowsfx = pygame.mixer.Sound(os.path.join(os.path.dirname(__file__), "sounds" , "soundfx" , "fallingSnow.mp3"))
             # self.place = sa.WaveObject.from_wave_file(os.path.join(os.path.dirname(__file__), "sounds" , "soundfx" , "place.wav"))
             self.playingsound = False
             self.frame = 0
@@ -60,6 +64,13 @@ class Speaker():
 
     def rainsound(self):
         self.ambientChannel.play(self.rainsfx)
+
+    def snowSound(self):
+        self.ambientChannel.play(self.snowsfx)
+
+    def windSound(self, loundness):
+        self.windChannel.set_volume(loundness)
+        self.windChannel.play(self.windSound)
 
     def pauseAll(self):
         self.musicChannel.pause()

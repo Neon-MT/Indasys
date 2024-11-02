@@ -85,16 +85,19 @@ class pausemenu():
     def __init__(self):
         self.midx, self.midy = getMiddle()
         self.spacing = 100
-        self.widths = 100
-        self.heights = 20
+        self.widths = 300
+        self.heights = 60
         self.offset = self.midy
         self.resumeRect = pygame.Rect(self.midx-self.widths/2, self.spacing + self.offset, self.widths, self.heights)
         self.font = pygame.font.SysFont('Cascadia Code', 50)
         self.pausedText = self.font.render("Paused",False, (255,255,255))
+        self.resumeText = self.font.render("Resume",False, (255,255,255))
+
     
     def update(self, screen):
         pygame.draw.rect(screen, (50,50,50), self.resumeRect)
         screen.blit(self.pausedText, (self.midx-self.pausedText.get_width()/2, 10))
+        screen.blit(self.resumeText, (self.midx-self.resumeText.get_width()/2, self.resumeRect.centery-self.resumeText.get_height()/2))
 
 
 class ui():

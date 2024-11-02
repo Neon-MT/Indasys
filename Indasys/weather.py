@@ -40,16 +40,15 @@ class stormHandler(pygame.sprite.Sprite):
             if e % 2 == 0:
                 if biome == 4:
                     colorvar = random.randint(-10,10)
-                    if random.randint(1,2) == 1:
-                        r = particle(random.randint(0-self.wind,SCREEN_WIDTH),0,random.randint(7,10), 10,25, (255,255,255))
-                    else:
-                        r = particle(0,random.randint(0-self.wind,SCREEN_WIDTH),random.randint(7,10), 10, 25, (255,255,255))
+                    
+                    r = particle(random.randint(-250,SCREEN_WIDTH),0,random.randint(7,10), 10+random.randint(-5,5),25+random.randint(-5,5), (245+colorvar,245+colorvar,245+colorvar))
+
                 else:
                     colorvar = random.randint(-10,10)
                     if random.randint(1,2) == 1:
-                        r = rain(random.randint(0-self.wind*2,SCREEN_WIDTH),-200-self.wind,20, 50, self.wind, (0,0,255))
+                        r = rain(random.randint(0,SCREEN_WIDTH),-200-self.wind,20, 50, self.wind, (0,0,255))
                     else:
-                        r = rain(-200,random.randint(0-self.wind,SCREEN_WIDTH), 20, 50, self.wind, (0,0,255))
+                        r = rain(-200,random.randint(0,SCREEN_HEIGHT), 20, 50, self.wind, (0,0,255))
                 self.rain.add(r)
             e += 1
 
