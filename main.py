@@ -78,7 +78,7 @@ class main():
         self.uier = ui(self.visableScreen)
         self.stormHandler = stormHandler()
         self.menu = pausemenu()
-        self.initiateStorm(30,3000)
+        self.initiateStorm(30,500)
         self.mainloop()
 
         
@@ -143,7 +143,7 @@ class main():
                 self.Player.update()
                 self.core.update(self.Player.x, self.Player.y)
                 
-                self.stormHandler.loop(self.biomeid)
+                self.stormHandler.loop(self.biomeid, self)
                 self.tilegroup.update(self.Player.x, self.Player.y, self.md, self)
                 self.topgroup.update(self.Player.x, self.Player.y, self.mdel, self)
                 self.conveyorgroup.update(self.Player.x, self.Player.y, self.frame, self.mdel, self)
@@ -236,6 +236,7 @@ class main():
                 self.visableScreen.fill((0,0,0))
                 if self.weatherbrightness == -1:
                     self.weatherScreen.fill((random.randint(200,255),random.randint(200,255),random.randint(200,255)))
+                    self.Speaker.thunderSound()
                 else:
                     self.weatherScreen.fill((0,0,0))
 
@@ -379,7 +380,13 @@ class main():
     def initiateStorm(self, intensity, duration):
         self.clouds = self.stormHandler.thunderStorm(intensity, duration)
         if self.biomeid != 4:
-            self.Speaker.rainsound()
+            self.Speaker.rainsound(duration)
+        else:
+            self.Speaker.snowSound(duration)
+        self.Speaker.windSound(intensity/100)
+
+    def stopAmbients(self):
+        self.Speaker.stopAmbients()
         
 
 

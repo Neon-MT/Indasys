@@ -35,20 +35,18 @@ class stormHandler(pygame.sprite.Sprite):
                 if random.randint(1,2) == 1:
                     a = particle(random.randint(-500-self.wind,SCREEN_WIDTH),-500,random.randint(50,200), self.intensity+random.randint(-2,2), self.intensity+random.randint(-2,2), (40+colorvar,40+colorvar,40+colorvar))
                 else:
-                    a = particle(-200,random.randint(-500-self.wind,SCREEN_WIDTH),random.randint(50,200), self.intensity+random.randint(-2,2), self.intensity+random.randint(-2,2), (40+colorvar,40+colorvar,40+colorvar))
+                    a = particle(-200,random.randint(-500-self.wind,SCREEN_HEIGHT),random.randint(50,200), self.intensity+random.randint(-2,2), self.intensity+random.randint(-2,2), (40+colorvar,40+colorvar,40+colorvar))
                 self.clouds.add(a)
             if e % 2 == 0:
+                #snow
                 if biome == 4:
                     colorvar = random.randint(-10,10)
-                    
-                    r = particle(random.randint(-250,SCREEN_WIDTH),0,random.randint(7,10), 10+random.randint(-5,5),25+random.randint(-5,5), (245+colorvar,245+colorvar,245+colorvar))
-
+                    r = particle(random.randint(-250,SCREEN_WIDTH),-100,random.randint(7,10), 10+random.randint(-5,5),25+random.randint(-5,5), (245+colorvar,245+colorvar,245+colorvar))
+                #rain
                 else:
-                    colorvar = random.randint(-10,10)
-                    if random.randint(1,2) == 1:
-                        r = rain(random.randint(0,SCREEN_WIDTH),-200-self.wind,20, 50, self.wind, (0,0,255))
-                    else:
-                        r = rain(-200,random.randint(0,SCREEN_HEIGHT), 20, 50, self.wind, (0,0,255))
+                    colorvar = random.randint(-10,10)  
+                    r = rain(random.randint(-300,SCREEN_WIDTH),-100,20, 50, self.wind, (0,0,255))
+
                 self.rain.add(r)
             e += 1
 
@@ -63,10 +61,12 @@ class stormHandler(pygame.sprite.Sprite):
 
 
     
-    def loop(self, biome):
+    def loop(self, biome, game):
         try:
             if self.duration > 0:
                 self.update(biome)
+            else:
+                game.stopAmbients()
         except:
             pass
 

@@ -13,7 +13,7 @@ WINDOWRECT = pygame.Rect(0,0,SCREEN_WIDTH,SCREEN_HEIGHT)
 PLANET = 4
 DIFFICULTY = 1000
 
-MOVEMENTSPEED = 6
+MOVEMENTSPEED = 10
 MAPSIZE = 50
 DEFAULT = np.array ([[0 for x in range(MAPSIZE)] for y in range(MAPSIZE)])
 TOPLAYER = np.array([[0 for x in range(MAPSIZE)]for y in range(MAPSIZE)])

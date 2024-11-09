@@ -2,6 +2,7 @@ import pygame.mixer
 from audioplayer import AudioPlayer
 import simpleaudio as sa
 import os 
+import time
 import random
 
 
@@ -15,18 +16,21 @@ class Speaker():
         self.sfxChannel = pygame.mixer.Channel(2)
         self.ambientChannel = pygame.mixer.Channel(3)
         self.windChannel = pygame.mixer.Channel(4)
+        self.thunderChannel = pygame.mixer.Channel(5)
         if b:
-            self.menumusic = pygame.mixer.Sound(os.path.join(os.path.dirname(__file__), "sounds" , "music" , "BeepBox-Song.ogg"))
+            self.menumusic = pygame.mixer.Sound(os.path.join(os.path.dirname(__file__), "sounds" , "music" , "menuTheme.ogg"))
             self.musicChannel.play(self.menumusic)
         else:
             self.s = pygame.mixer.Sound(os.path.join(os.path.dirname(__file__), "sounds" , "music" , "s.ogg"))
             self.deletesound = pygame.mixer.Sound(os.path.join(os.path.dirname(__file__), "sounds" , "soundfx" , "delete.ogg"))
-            self.a = pygame.mixer.Sound(os.path.join(os.path.dirname(__file__), "sounds" , "music" , "hahhhh.ogg"))
-            self.chaos = pygame.mixer.Sound(os.path.join(os.path.dirname(__file__), "sounds" , "music" , "Chaotic ahh.ogg"))
-            self.bbxs = pygame.mixer.Sound(os.path.join(os.path.dirname(__file__), "sounds" , "music" , "BeepBox-Song.ogg"))
+            self.a = pygame.mixer.Sound(os.path.join(os.path.dirname(__file__), "sounds" , "music" , "a.ogg"))
+            self.chaos = pygame.mixer.Sound(os.path.join(os.path.dirname(__file__), "sounds" , "music" , "Pending.ogg"))
+            self.bbxs = pygame.mixer.Sound(os.path.join(os.path.dirname(__file__), "sounds" , "music" , "menuTheme.ogg"))
             self.dune = pygame.mixer.Sound(os.path.join(os.path.dirname(__file__), "sounds" , "music" , "Dune.ogg"))
             self.rainsfx = pygame.mixer.Sound(os.path.join(os.path.dirname(__file__), "sounds" , "soundfx" , "rain.ogg"))
             self.thundersfx = pygame.mixer.Sound(os.path.join(os.path.dirname(__file__), "sounds" , "soundfx" , "thunder.mp3"))
+            self.thunder2sfx = pygame.mixer.Sound(os.path.join(os.path.dirname(__file__), "sounds" , "soundfx" , "thunder2.mp3"))
+            self.thunder3sfx = pygame.mixer.Sound(os.path.join(os.path.dirname(__file__), "sounds" , "soundfx" , "thunder3.mp3"))
             self.windsfx = pygame.mixer.Sound(os.path.join(os.path.dirname(__file__), "sounds" , "soundfx" , "wind.mp3"))
             self.snowsfx = pygame.mixer.Sound(os.path.join(os.path.dirname(__file__), "sounds" , "soundfx" , "fallingSnow.mp3"))
             # self.place = sa.WaveObject.from_wave_file(os.path.join(os.path.dirname(__file__), "sounds" , "soundfx" , "place.wav"))
@@ -62,15 +66,24 @@ class Speaker():
     def delSound(self):
         self.sfxChannel.play(self.deletesound)
 
-    def rainsound(self):
+    def rainsound(self, duration):
         self.ambientChannel.play(self.rainsfx)
 
-    def snowSound(self):
-        self.ambientChannel.play(self.snowsfx)
+    def snowSound(self, duration):
+        self.ambientChannel.play(self.snowsfx, int(duration/30))
+
+    def thunderSound(self):
+        r = random.randint(1,3)
+        if r == 1:
+            pygame.mixer.find_channel().play(self.thundersfx)
+        elif r == 2:
+            pygame.mixer.find_channel().play(self.thunder2sfx)
+        else:
+            pygame.mixer.find_channel().play(self.thunder3sfx)
 
     def windSound(self, loundness):
         self.windChannel.set_volume(loundness)
-        self.windChannel.play(self.windSound)
+        self.windChannel.play(self.windsfx)
 
     def pauseAll(self):
         self.musicChannel.pause()
@@ -84,3 +97,8 @@ class Speaker():
 
     def stopMusic(self):
         self.musicChannel.stop()
+    
+    def stopAmbients(self):
+        self.ambientChannel.fadeout(6)
+        self.ambientChannel.fadeout(6)
+        #self.ambientChannel.stop()
