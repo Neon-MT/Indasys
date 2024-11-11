@@ -1,5 +1,4 @@
 import pygame.mixer
-from audioplayer import AudioPlayer
 import simpleaudio as sa
 import os 
 import time

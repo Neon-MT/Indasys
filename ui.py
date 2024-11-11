@@ -1,7 +1,5 @@
 import pygame
 import sys
-import random
-import thorpy as tp
 from configLoader import *
 import pygame.font
 
