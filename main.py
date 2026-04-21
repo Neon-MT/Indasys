@@ -50,7 +50,7 @@ class main():
 
         self.font = pygame.font.SysFont('Ariel', 50)
         self.tileMap = np.array ([[0 for x in range(MAPSIZE)] for y in range(MAPSIZE)])
-        self.Speaker = Speaker(False)
+        self.Speaker = None
         self.pastTitle = False
         self.title = titleScreen()
         self.corex = random.randint(0,MAPSIZE-1)
